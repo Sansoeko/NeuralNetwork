@@ -16,11 +16,18 @@ def plot_digits(data, num_cols, shape=(28,28)):
         plt.axis('off')
         plt.imshow(data[i].reshape(shape), interpolation='nearest', cmap='Greys')
     plt.show()
-    
+
 
 if __name__=="__main__":
 	(x_train, t_train), (x_valid, t_valid), (x_test, t_test) = load_mnist()
 
-	#plot_digits(x_train[0:1], 1)
+	#
+	#
+	#plot_digits(x_train[:10], 5)
 
-	print t_train.shape
+	print x_train.shape #waardes van de pixels
+	print t_train.shape #de goede antwoorden
+
+	#inputnodes: 28**2 = 784
+	#hiddenodes: ???
+	#outputnodes: [0,0,0,0,0,0,0,0,0,0] = 10
