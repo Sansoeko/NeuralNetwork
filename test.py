@@ -23,7 +23,7 @@ if __name__=="__main__":
 
 	#
 	#
-	#plot_digits(x_train[:10], 5)
+	plot_digits(x_train[:10], 5)
 
 	print x_train.shape #waardes van de pixels
 	print t_train.shape #de goede antwoorden

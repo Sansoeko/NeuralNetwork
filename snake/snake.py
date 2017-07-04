@@ -8,11 +8,13 @@ import numpy as np
 
 WIDTH = 30
 HEIGHT = 30
-SNAKE_CHAR = "#"
-POWERUP_CHAR = "*"
+SNAKE_CHAR = "X"
+POWERUP_CHAR = "o"
 EMPTY_CHAR = "."
-SPEED = 0.05  # Time between two frames
+SPEED = 0.12  # Time between two frames
 START_LENGTH = 6
+POWERUP = False #is powerup spawned?
+X = 0.2 #change powerup is spawned every frame
 
 
 def clean_grid():
@@ -53,10 +55,10 @@ def next_pos(pos, direction):
     Get next position based on current position and direction.
     """
     change = {
-        'down': (1, 0),
-        'up': (-1, 0),
-        'left': (0, -1),
-        'right': (0, 1),
+        -1: (1, 0),
+        1: (-1, 0),
+        -2: (0, -1),
+        2: (0, 1),
     }[direction]
     return (pos[0] + change[0], pos[1] + change[1])
 
@@ -66,10 +68,10 @@ def key_to_direction(key):
     Convert keypress code to direction.
     """
     return {
-        258: 'down',
-        259: 'up',
-        260: 'left',
-        261: 'right',
+        258: -1, 	#Down
+        259: 1,  	#Up
+        260: -2, 	#Left
+        261: 2,		#Right
     }[key]
 
 
@@ -77,20 +79,34 @@ def update_snake(grid, snake, direction):
     """
     Update the snake by removing from tail, adding the next position, and updating the grid.
     """
-    # TODO do not remove from tail if powerup is collected
     # TODO reset game when colliding with tail
-    grid[snake[0][0] % HEIGHT, snake[0][1] % WIDTH] = EMPTY_CHAR
-    del snake[0]
-    snake.append(next_pos(snake[-1], direction))
-    grid[snake[-1][0] % HEIGHT, snake[-1][1] % WIDTH] = SNAKE_CHAR
+    global POWERUP
+    if grid[next_pos(snake[-1], direction)] == POWERUP_CHAR:
+    	snake.append(next_pos(snake[-1], direction))
+    	grid[snake[-1][0] % HEIGHT, snake[-1][1] % WIDTH] = SNAKE_CHAR
+    	POWERUP = False
+    elif grid[next_pos(snake[-1], direction)] == SNAKE_CHAR:
+    	grid, snake, direction = new_game()
+    else:
+    	grid[snake[0][0] % HEIGHT, snake[0][1] % WIDTH] = EMPTY_CHAR
+    	del snake[0]
+    	snake.append(next_pos(snake[-1], direction))
+    	grid[snake[-1][0] % HEIGHT, snake[-1][1] % WIDTH] = SNAKE_CHAR
 
 
 def spawn_powerup(grid):
+    
     """
     If there is not yet a powerup, with possibility of x, add powerup to grid.
     """
     # TODO implement here
-    pass
+    global POWERUP
+    global X
+    if POWERUP == False:
+    	if rd.random() < X:
+    		grid[(rd.randint(1, HEIGHT - 1), rd.randint(1, WIDTH - 1))] = POWERUP_CHAR
+    		POWERUP = True
+
 
 
 def main(stdscr):
@@ -103,8 +119,8 @@ def main(stdscr):
         # Keyinput to change direction of snake.
         char = stdscr.getch()
         if char in range(258, 262):
-            # TODO do not accept change of direction to the opposite of current direction
-            direction = key_to_direction(char)
+            if not direction == -1*key_to_direction(char):
+            	direction = key_to_direction(char)
         if char == 113:
             break
 
