@@ -1,5 +1,6 @@
 import gzip, cPickle
 import matplotlib.pyplot as plt
+import numpy as np
 
 def load_mnist():
     data_file = gzip.open('mnist.pkl.gz', 'rb')
@@ -47,13 +48,15 @@ def plot_average(dict_positions):
     print dict2
 
     k = 0
+    print_temp = np.array([0]*7840)
+    print_temp.shape = (10,784)
     while k < 10:
-    	print_temp = dict2[k]
-    	print_temp.shape = (1,784)
-    	print print_temp.shape
-    	plot_digits(print_temp,1)
-    	print len(list_temp)
+    	print_temp[k] = dict2[k]
     	k = k + 1
+    print print_temp
+    print_temp.shape = (10,784)
+    print print_temp.shape
+    plot_digits(print_temp,5)
 
 
 if __name__ == "__main__":
@@ -61,22 +64,6 @@ if __name__ == "__main__":
     
     dict1 = get_symbol_position([0,1,2,3,4,5,6,7,8,9],t_train)
     plot_average(dict1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     #plot_digits(x_train[:10], 5) #laat de eerset 10 plaatjes zien
