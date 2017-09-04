@@ -26,6 +26,15 @@ def get_digits(symbols,position_data,data):
 	for position in range (0,len(position_data)):
 		symbols_labeled[position_data[position]] = symbols_labeled[position_data[position]] + [data[position]] #sort all symbols in the dict symbols_labeled
 	#Het lukt me hier niet om de eerste 10 digits van elke list the plotten en ik heb geen idee waarom !?!
+	plot_data = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}
+	for label in range (0,10):	
+		plot_data[label] = symbols_labeled[label][1]
+	plot_tmp = np.array([0]*7840)
+	plot_tmp.shape = (10,784)
+	for i in range (0,10):
+		plot_tmp[i] = plot_data[i]
+	plot_tmp.shape = (10,784)
+	plot_digits(plot_tmp,5) #wtf waarom werkt dit niet!?!
 	#test = [0] * 10 #Er zijn blijkbaar niet van elk getal 5000 voorbeelden (!?!)
 	#for i in range (0,10):
 	#	print len(symbols_labeled[i])
@@ -60,24 +69,29 @@ class module_average:
 
 	def __init__(self):   
 		average_digits = plot_average(symbols_labeled)
-		self.valid_average(x_valid,t_valid,average_digits)
-
+		self.valid_average(x_valid,t_valid,average_digits)  #score: 2.0525030525
+		#self.valid_average(x_train,t_train,average_digits)  #score: 1.8219889378
+		#self.valid_average(x_test,t_test,average_digits)	#score: 2.0039050766
 
 
 	def valid_average(self,data,data_pos,average_digits):
 	    answers_right = [0] * 10
 	    answers_wrong = [0] * 10
 	    for pos in range (0,len(data_pos)): #hij test meteen alles
-	    	print "Testing " + str(pos+1) + "/" + str(len(data_pos)) + ". "
+	    	if pos % 719 == 0:
+	    		print str(pos/float(len(data_pos)) * 100) + "%" #hij laadt een laad percentage zien
+	    	#print "Testing " + str(pos+1) + "/" + str(len(data_pos)) + ". "
 	    	guess = get_diference(average_digits,data,pos)
 	    	#print "The right answer is: " + str(data_pos[pos])
 	    	if guess == data_pos[pos]:
 	    		answers_right[data_pos[pos]] = answers_right[data_pos[pos]] + 1.0
 	    	else:
 	    		answers_wrong[data_pos[pos]] = answers_wrong[data_pos[pos]] + 1.0
+	    print "Done!"
 	    print "right: " + str(answers_right) + "!"
 	    print "wrong: " + str(answers_wrong) + "!"
 	    print sum(answers_right)/sum(answers_wrong)
+
 
 if __name__ == "__main__":
     (x_train, t_train), (x_valid, t_valid), (x_test, t_test) = load_mnist()
