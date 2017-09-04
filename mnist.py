@@ -2,6 +2,7 @@ import gzip, cPickle
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def load_mnist():
     data_file = gzip.open('mnist.pkl.gz', 'rb')
     data = cPickle.load(data_file)
@@ -21,9 +22,15 @@ def plot_digits(data, num_cols, shape=(28,28)):
 
 def get_digits(symbols,position_data,data):
 	symbols_labeled = {0:[],1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[]}
+	#print len(position_data)
 	for position in range (0,len(position_data)):
 		symbols_labeled[position_data[position]] = symbols_labeled[position_data[position]] + [data[position]] #sort all symbols in the dict symbols_labeled
 	#Het lukt me hier niet om de eerste 10 digits van elke list the plotten en ik heb geen idee waarom !?!
+	#test = [0] * 10 #Er zijn blijkbaar niet van elk getal 5000 voorbeelden (!?!)
+	#for i in range (0,10):
+	#	print len(symbols_labeled[i])
+	#	test[i] = len(symbols_labeled[i])
+	#print sum(test)
 	return symbols_labeled
 
 
@@ -37,31 +44,52 @@ def plot_average(symbols_labeled):
     	plot_tmp[i] = average_digit[i]
     plot_tmp.shape = (10,784)
     plot_digits(plot_tmp,5)
+    return average_digit
+
+def get_diference(average_digits,data,position):
+	diference = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}
+	for i in range (0,10):
+		diference[i] = sum(abs(data[position] - average_digits[i]/len(symbols_labeled[i]))) / 784 #Er zijn blijkbaar niet van elk getal 5000 voorbeelden (!?!) dus daarom geef ik de waarde van symbols_labeled
+		print str(diference[i]*100) + "% between the average " + str(i)
+	guess =  min(diference.items(), key=lambda x: x[1]) #het , key=lambda x: x[1]) gedeelte heb ik op internet gevonden, geen idee wat het betekent
+	print guess
+	return guess[0]
+
+
+def valid_average(data,data_pos,average_digits):
+    answers = {"Right_valid":0,"Wrong_valid":0,"Right_test":0,"Wrong_test":0}
+    for pos in range (0,len(data_pos)): #hij test meteen alles
+    	guess = get_diference(average_digits,data,pos)
+    	print "The right answer is: " + str(data_pos[pos])
+    	if guess == data_pos[pos]:
+    		answers["Right_valid"] = answers["Right_valid"] + 1
+    	else:
+    		answers["Wrong_valid"] = answers["Wrong_valid"] + 1
+    print "right: " + str(answers["Right_valid"]) + "!"
+    print "wrong: " + str(answers["Wrong_valid"]) + "!"
 
 
 if __name__ == "__main__":
     (x_train, t_train), (x_valid, t_valid), (x_test, t_test) = load_mnist()
     
-    symbols_labeled = get_digits([0,1,2,3,4,5,6,7,8,9],t_train,x_train)
-    plot_average(symbols_labeled)
+    symbols_labeled = get_digits([0,1,2,3,4,5,6,7,8,9],t_train,x_train)    
+    average_digits = plot_average(symbols_labeled)
+
+    valid_average(x_valid,t_valid,average_digits)
 
 
     #plot_digits(x_train[:10], 5) #laat de eerset 10 plaatjes zien
 
     #print x_train.shape #waardes van de pixels
     #print t_train.shape #de goede antwoorden
-    #print x_train[:10]
-    #print t_train[:10]
 
 	#inputnodes: 28**2 = 784
 	#hiddenodes: ???
 	#outputnodes: [0,0,0,0,0,0,0,0,0,0] = 10
 
 
-    #TODO create dict with labels as keys and corresponding digits as values (dict1)
+    #DONE 1 create dict with labels as keys and corresponding digits as values (dict1)
+    #DONE 3 create dict with average digits (dict2)
+    #DONE 4 print the 10 average digits
 
-    #TODO print the first 10 members of every digit
-
-    #TODO create dict with average digits (dict2)
-
-    #TODO print the 10 average digits
+    #TODO 2 print the first 10 members of every digit
