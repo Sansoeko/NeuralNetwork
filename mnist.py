@@ -56,26 +56,31 @@ def get_diference(average_digits,data,position):
 	return guess[0]
 
 
-def valid_average(data,data_pos,average_digits):
-    answers = {"Right_valid":0,"Wrong_valid":0,"Right_test":0,"Wrong_test":0}
-    for pos in range (0,len(data_pos)): #hij test meteen alles
-    	guess = get_diference(average_digits,data,pos)
-    	print "The right answer is: " + str(data_pos[pos])
-    	if guess == data_pos[pos]:
-    		answers["Right_valid"] = answers["Right_valid"] + 1
-    	else:
-    		answers["Wrong_valid"] = answers["Wrong_valid"] + 1
-    print "right: " + str(answers["Right_valid"]) + "!"
-    print "wrong: " + str(answers["Wrong_valid"]) + "!"
+class module_average:
 
+	def __init__(self):   
+		average_digits = plot_average(symbols_labeled)
+		self.valid_average(x_valid,t_valid,average_digits)
+
+
+	def valid_average(self,data,data_pos,average_digits):
+	    answers = {"Right_valid":0.0,"Wrong_valid":0.0,"Right_test":0.0,"Wrong_test":0.0}
+	    for pos in range (0,len(data_pos)): #hij test meteen alles
+	    	guess = get_diference(average_digits,data,pos)
+	    	print "The right answer is: " + str(data_pos[pos])
+	    	if guess == data_pos[pos]:
+	    		answers["Right_valid"] = answers["Right_valid"] + 1.0
+	    	else:
+	    		answers["Wrong_valid"] = answers["Wrong_valid"] + 1.0
+	    print "right: " + str(answers["Right_valid"]) + "!"
+	    print "wrong: " + str(answers["Wrong_valid"]) + "!"
+	    print answers["Right_valid"]/answers["Wrong_valid"]
 
 if __name__ == "__main__":
     (x_train, t_train), (x_valid, t_valid), (x_test, t_test) = load_mnist()
-    
-    symbols_labeled = get_digits([0,1,2,3,4,5,6,7,8,9],t_train,x_train)    
-    average_digits = plot_average(symbols_labeled)
+    symbols_labeled = get_digits([0,1,2,3,4,5,6,7,8,9],t_train,x_train) 
 
-    valid_average(x_valid,t_valid,average_digits)
+    running_module = module_average()
 
 
     #plot_digits(x_train[:10], 5) #laat de eerset 10 plaatjes zien
