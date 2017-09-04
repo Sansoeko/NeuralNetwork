@@ -50,9 +50,9 @@ def get_diference(average_digits,data,position):
 	diference = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}
 	for i in range (0,10):
 		diference[i] = sum(abs(data[position] - average_digits[i]/len(symbols_labeled[i]))) / 784 #Er zijn blijkbaar niet van elk getal 5000 voorbeelden (!?!) dus daarom geef ik de waarde van symbols_labeled
-		print str(diference[i]*100) + "% between the average " + str(i)
+		#print str(diference[i]*100) + "% between the average " + str(i)
 	guess =  min(diference.items(), key=lambda x: x[1]) #het , key=lambda x: x[1]) gedeelte heb ik op internet gevonden, geen idee wat het betekent
-	print guess
+	#print guess
 	return guess[0]
 
 
@@ -63,24 +63,28 @@ class module_average:
 		self.valid_average(x_valid,t_valid,average_digits)
 
 
+
 	def valid_average(self,data,data_pos,average_digits):
-	    answers = {"Right_valid":0.0,"Wrong_valid":0.0,"Right_test":0.0,"Wrong_test":0.0}
+	    answers_right = [0] * 10
+	    answers_wrong = [0] * 10
 	    for pos in range (0,len(data_pos)): #hij test meteen alles
+	    	print "Testing " + str(pos+1) + "/" + str(len(data_pos)) + ". "
 	    	guess = get_diference(average_digits,data,pos)
-	    	print "The right answer is: " + str(data_pos[pos])
+	    	#print "The right answer is: " + str(data_pos[pos])
 	    	if guess == data_pos[pos]:
-	    		answers["Right_valid"] = answers["Right_valid"] + 1.0
+	    		answers_right[data_pos[pos]] = answers_right[data_pos[pos]] + 1.0
 	    	else:
-	    		answers["Wrong_valid"] = answers["Wrong_valid"] + 1.0
-	    print "right: " + str(answers["Right_valid"]) + "!"
-	    print "wrong: " + str(answers["Wrong_valid"]) + "!"
-	    print answers["Right_valid"]/answers["Wrong_valid"]
+	    		answers_wrong[data_pos[pos]] = answers_wrong[data_pos[pos]] + 1.0
+	    print "right: " + str(answers_right) + "!"
+	    print "wrong: " + str(answers_wrong) + "!"
+	    print sum(answers_right)/sum(answers_wrong)
 
 if __name__ == "__main__":
     (x_train, t_train), (x_valid, t_valid), (x_test, t_test) = load_mnist()
     symbols_labeled = get_digits([0,1,2,3,4,5,6,7,8,9],t_train,x_train) 
 
     running_module = module_average()
+    del running_module
 
 
     #plot_digits(x_train[:10], 5) #laat de eerset 10 plaatjes zien
