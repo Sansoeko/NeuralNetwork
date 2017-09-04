@@ -18,52 +18,32 @@ def plot_digits(data, num_cols, shape=(28,28)):
         plt.imshow(data[i].reshape(shape), interpolation='nearest', cmap='Greys')
     plt.show()
 
-def get_symbol_position(symbols,position_data):
-	dict1 = {0:[],1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[]}
-	n = 0
-	while n < len(position_data):
-		dict1[position_data[n]] = dict1[position_data[n]] + [n]
-		n = n + 1
-	print n
-	n = 0
-	while n < 10:
-		list_print = dict1[n]
-		print "The 10 first positions with " + str(n) + ": " + str(list_print[:10])
-		n = n + 1
-	return dict1
+
+def get_digits(symbols,position_data,data):
+	symbols_labeled = {0:[],1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[],9:[]}
+	for position in range (0,len(position_data)):
+		symbols_labeled[position_data[position]] = symbols_labeled[position_data[position]] + [data[position]] #sort all symbols in the dict symbols_labeled
+	#Het lukt me hier niet om de eerste 10 digits van elke list the plotten en ik heb geen idee waarom !?!
+	return symbols_labeled
 
 
-def plot_average(dict_positions):
-    dict2 = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}
-    k = 0
-    while k < 10:
-        list_temp = dict_positions[k]	
-    	n = 0
-    	while n < len(list_temp):
-    		dict2[k] = dict2[k] + x_train[list_temp[n]]
-    		#dict2[k] = dict2[k] / 10
-    		#del list_temp[k]
-    		n = n + 1
-    	k = k + 1
-    print dict2
-
-    k = 0
-    print_temp = np.array([0]*7840)
-    print_temp.shape = (10,784)
-    while k < 10:
-    	print_temp[k] = dict2[k]
-    	k = k + 1
-    print print_temp
-    print_temp.shape = (10,784)
-    print print_temp.shape
-    plot_digits(print_temp,5)
+def plot_average(symbols_labeled):
+    average_digit = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0}
+    for label in range (0,10):	
+    	average_digit[label] = sum(symbols_labeled[label])
+    plot_tmp = np.array([0]*7840)
+    plot_tmp.shape = (10,784)
+    for i in range (0,10):
+    	plot_tmp[i] = average_digit[i]
+    plot_tmp.shape = (10,784)
+    plot_digits(plot_tmp,5)
 
 
 if __name__ == "__main__":
     (x_train, t_train), (x_valid, t_valid), (x_test, t_test) = load_mnist()
     
-    dict1 = get_symbol_position([0,1,2,3,4,5,6,7,8,9],t_train)
-    plot_average(dict1)
+    symbols_labeled = get_digits([0,1,2,3,4,5,6,7,8,9],t_train,x_train)
+    plot_average(symbols_labeled)
 
 
     #plot_digits(x_train[:10], 5) #laat de eerset 10 plaatjes zien
