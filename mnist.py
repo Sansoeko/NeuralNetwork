@@ -1,4 +1,6 @@
-import gzip, cPickle
+import gzip
+import cPickle
+from collections import defaultdict
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -30,27 +32,29 @@ def get_digits_per_label(x, y, labels):
     """
     digits_per_label = dict(zip(labels, [[]] * len(labels)))
     for elem_x, elem_y in zip(x, y):
-        digits_per_label[elem_y].append(elem_x)
+        digits_per_label[elem_y] = digits_per_label[elem_y] + [elem_x]
     return digits_per_label
 
 
 def get_diferences(average_digits, x, labels):
     diferences = []
     for label in labels:
-        print np.array(average_digits[label])
-        average_digits[label].shape = (1, 784)
-        plot_digits(np.array(average_digits[label]), 1)
+        # print np.array(average_digits[label])
+        # average_digits[label].shape = (1, 784)
+        # plot_digits(np.array([average_digits[label]]), 1)
         diferences.append(sum(abs(x - average_digits[label])))
-    print len(diferences)
     return diferences
 
 
-def get_accuracy(predicted_y,true_y):
-    if predicted_y == true_y:
-        answers_right[data_pos[pos]] = answers_right[data_pos[pos]] + 1.0
-    else:
-        answers_wrong[data_pos[pos]] = answers_wrong[data_pos[pos]] + 1.0
-    return sum(answers_right) / sum(answers_wrong)
+def get_accuracy(predicted_y,true_y,labels):
+    answers_right = dict(zip(labels, [0] * len(labels)))
+    answers_wrong = dict(zip(labels, [0] * len(labels)))
+    for i in range(len(predicted_y)): # TODO use zip instead
+        if predicted_y[i] == true_y[i]:
+            answers_right[true_y[i]] = answers_right[true_y[i]] + 1.0
+        else:
+            answers_wrong[true_y[i]] = answers_wrong[true_y[i]] + 1.0
+    return sum(answers_right.values()) / float(len(predicted_y))
 
 
 class ModelAverage:
@@ -58,16 +62,16 @@ class ModelAverage:
         self.average_digits = {}
 
     def train(self, digits_per_label, labels):
-        self.average_digits = dict(zip(labels, [[]] * len(labels)))
+        self.average_digits = defaultdict()
         for elem in labels:
-            self.average_digits[elem] = sum(sum(digits_per_label[elem])) / float(len(digits_per_label[elem]))
-        exit()
+            self.average_digits[elem] = sum(digits_per_label[elem]) / float(len(digits_per_label[elem]))
 
     def predict(self, x):
-        differences = get_diferences(self.average_digits, x[0], labels)
-        print differences
-        # return lowest_difference
-        exit()
+        predicted_y = []
+        for elem in x:
+            differences = get_diferences(self.average_digits, elem, labels)
+            # plot_digits(np.array([elem]), 1)
+            predicted_y += [np.argmin(differences)]
         return predicted_y
 
 
@@ -76,31 +80,22 @@ if __name__ == "__main__":
     (x_train, y_train), (x_valid, y_valid), (x_test, y_test) = load_mnist()
     labels = range(10)
     train_digits_per_label = get_digits_per_label(x_train, y_train, labels)
-    for i in labels:
-        print_tmp = train_digits_per_label[i][:10]
-        print_tmp = np.array(print_tmp)
-        print print_tmp.shape
-        plot_digits(print_tmp, 2)
-    exit()
+    # TODO print first ten of every class
+    # for i in labels:
+    #     print_tmp = train_digits_per_label[i][:10]
+    #     print_tmp = np.array(print_tmp)
+    #     print print_tmp.shape
+    #     plot_digits(print_tmp, 2)
+    # exit()
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
     predicted_y = model_average.predict(x_valid)
-    print get_accuracy(predicted_y, y_valid)
-
+    # TODO print all average digits
+    print 'accuracy: {}%!'.format(get_accuracy(predicted_y, y_valid,labels) * 100)
+    # TODO  add accuracy per label
+    # TODO doc strings (see get_digits_per_label) for all functions and all classes.
     """
-    plot_digits(x_train[:10], 5) #laat de eerset 10 plaatjes zien
-
-    print x_train.shape #waardes van de pixels
-    print t_train.shape #de goede antwoorden
-
     inputnodes: 28**2 = 784
     hiddenodes: ???
     outputnodes: [0,0,0,0,0,0,0,0,0,0] = 10
-
-
-    DONE 1 create dict with labels as keys and corresponding digits as values (dict1)
-    DONE 3 create dict with average digits (dict2)
-    DONE 4 print the 10 average digits
-
-    TODO 2 print the first 10 members of every digit
     """
