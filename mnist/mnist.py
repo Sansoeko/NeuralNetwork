@@ -1,8 +1,9 @@
 import gzip
 import cPickle
 from collections import defaultdict
-import matplotlib.pyplot as plt
 import numpy as np
+from models.model_average import ModelAverage
+import models.image_helpers as image_helpers
 
 
 def load_mnist():
@@ -14,23 +15,6 @@ def load_mnist():
     data = cPickle.load(data_file)
     data_file.close()
     return data
-
-
-def plot_digits(data, num_cols, shape=(28, 28)):
-    """
-    Plots digits of data in 'num_cols' number of collums. Default shape = (28, 28)
-    :param data: Input data.
-    :param num_cols: Number of collums.
-    :param shape: Shape to plot in (X, Y). default = (28, 28)
-    :return: Nothing, plots the input data.
-    """
-    num_digits = data.shape[0]
-    num_rows = int(num_digits / num_cols)
-    for i in range(num_digits):
-        plt.subplot(num_rows, num_cols, i + 1)
-        plt.axis('off')
-        plt.imshow(data[i].reshape(shape), interpolation='nearest', cmap='Greys')
-    plt.show()
 
 
 def plot_example_per_class(x, classes, amount):
@@ -45,7 +29,7 @@ def plot_example_per_class(x, classes, amount):
     for i in classes:
         print_tmp = print_tmp + x[i][:amount]
     print_tmp = np.array(print_tmp)
-    plot_digits(print_tmp, amount)
+    models.image_helpers.plot_digits(print_tmp, amount)
 
 
 def get_digits_per_label(x, y, labels):
@@ -60,23 +44,6 @@ def get_digits_per_label(x, y, labels):
     for elem_x, elem_y in zip(x, y):
         digits_per_label[elem_y] = digits_per_label[elem_y] + [elem_x]
     return digits_per_label
-
-
-def get_diferences(x0, x1, labels):
-    """
-    Calculates the difernce between to pictures: x1 - x0[element].
-    :param x0: input list of pictures
-    :param x1:  input picture
-    :param labels:
-    :return: absolute difference between x0 and x1
-    """
-    diferences = []
-    for label in labels:
-        # print np.array(average_digits[label])
-        # average_digits[label].shape = (1, 784)
-        # plot_digits(np.array([average_digits[label]]), 1)
-        diferences.append(sum(abs(x1 - x0[label])))
-    return diferences
 
 
 def get_accuracy(predicted_y, true_y, labels):
@@ -115,10 +82,10 @@ def fit(average_x, x, labels):
     :param labels: labels in average_x and x
     :return:
     """
-    lowest_difference = get_diferences(average_x, x, labels)
+    lowest_difference = image_helpers.get_diferences(average_x, x, labels)
     for i in range(len(x)/2):
         x[i] = x[i-1]
-        differences = get_diferences(average_x, x, labels)
+        differences = image_helpers.get_diferences(average_x, x, labels)
         if np.argmin(differences) < np.argmin(lowest_difference):
             lowest_difference = differences
     return lowest_difference
@@ -136,42 +103,6 @@ def get_digit_parts(data, size_x=784, size=16):
     return [output]
 
 
-class ModelAverage:
-    def __init__(self):
-        self.average_digits = {}
-
-    def train(self, digits_per_label, labels):
-        """
-        Trains model Average
-        :param digits_per_label: All digits sorted by label
-        :param labels: All labels
-        :return: Nothing
-        """
-        for elem in labels:
-            self.average_digits[elem] = sum(digits_per_label[elem]) / float(len(digits_per_label[elem]))
-
-    def predict(self, x):
-        """
-        Predicts x with self.average_digits
-        :param x: Data to predict.
-        :return: predicted y values.
-        """
-        predicted_y = []
-        for elem in x:
-            differences = get_diferences(self.average_digits, elem, labels)
-            # plot_digits(np.array([elem]), 1)
-            predicted_y += [np.argmin(differences)]
-        return predicted_y
-
-    def plot_average_digits(self):
-        """
-        Plots the average digits, in collums of lenght 5.
-        :return: Nothing
-        """
-        print_tmp = np.array(self.average_digits.values())
-        plot_digits(print_tmp, 5)
-
-
 class ModelContrast:
     def __init__(self):
         self.average_digits = defaultdict()
@@ -187,14 +118,14 @@ class ModelContrast:
         predicted_y = []
         for elem in x:
             digit = get_contrast(elem)
-            differences = get_diferences(self.average_contrast, digit, labels)
+            differences = image_helpers.get_diferences(self.average_contrast, digit, labels)
             # plot_digits(np.array([elem]), 1)
             predicted_y += [np.argmin(differences)]
         return predicted_y
 
     def plot_contrast_average_digits(self):
         print_tmp = np.array(self.average_contrast.values())
-        plot_digits(print_tmp, 5)
+        image_helpers.plot_digits(print_tmp, 5)
 
 
 if __name__ == "__main__":
@@ -216,11 +147,10 @@ if __name__ == "__main__":
     accuracy = get_accuracy(predicted_y, y_valid, labels).values()
     print accuracy
     print format(sum(accuracy) * 100.0) + "%!"
-    exit()
 
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
-    predicted_y = model_average.predict(x_valid)
+    predicted_y = model_average.predict(x_valid, labels)
     model_average.plot_average_digits()
     accuracy = get_accuracy(predicted_y, y_valid, labels).values()
     print accuracy
