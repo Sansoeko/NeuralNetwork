@@ -1,5 +1,6 @@
 import numpy as np
 import image_helpers
+import stand_funcs
 
 
 class ModelAverage:
