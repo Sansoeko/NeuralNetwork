@@ -100,6 +100,42 @@ def get_accuracy(predicted_y, true_y, labels):
     return answers_accuracy
 
 
+def get_contrast(x):
+    contrast = x
+    for i in range(0, len(x)-1):
+        contrast[i] = x[i] - x[i+1]
+    return contrast
+
+
+def fit(average_x, x, labels):
+    """
+    Fit the x (digit) ont the average_x (average digit). DONOT USE, is enormous time consuming. But increases accuracy.
+    :param average_x: average digit
+    :param x: digit
+    :param labels: labels in average_x and x
+    :return:
+    """
+    lowest_difference = get_diferences(average_x, x, labels)
+    for i in range(len(x)/2):
+        x[i] = x[i-1]
+        differences = get_diferences(average_x, x, labels)
+        if np.argmin(differences) < np.argmin(lowest_difference):
+            lowest_difference = differences
+    return lowest_difference
+
+
+def get_digit_parts(data, size_x=784, size=16):
+    output = []
+    for part in range(size_x/size):
+        z = []
+        for y in range(int(size**0.5)):
+            for x in range(int(size**0.5)):
+                # TODO ???
+                z.append(data[pos])
+        output.append(z)
+    return [output]
+
+
 class ModelAverage:
     def __init__(self):
         self.average_digits = {}
@@ -136,32 +172,47 @@ class ModelAverage:
         plot_digits(print_tmp, 5)
 
 
-class ModelPartialShape:
+class ModelContrast:
     def __init__(self):
-        self.average_shapes = defaultdict()
+        self.average_digits = defaultdict()
+        self.average_contrast = defaultdict()
 
     def train(self, digits_per_label, labels):
         for elem in labels:
-            self.average_shapes[elem] = sum(digits_per_label[elem]) / float(len(digits_per_label[elem]))
+            self.average_digits[elem] = sum(digits_per_label[elem]) / float(len(digits_per_label[elem]))
+        for elem in self.average_digits:
+            self.average_contrast[elem] = get_contrast(self.average_digits[elem])
 
     def predict(self, x):
         predicted_y = []
         for elem in x:
-            differences = get_diferences(self.average_digits, elem, labels)
+            digit = get_contrast(elem)
+            differences = get_diferences(self.average_contrast, digit, labels)
             # plot_digits(np.array([elem]), 1)
             predicted_y += [np.argmin(differences)]
         return predicted_y
+
+    def plot_contrast_average_digits(self):
+        print_tmp = np.array(self.average_contrast.values())
+        plot_digits(print_tmp, 5)
 
 
 if __name__ == "__main__":
     (x_train, y_train), (x_valid, y_valid), (x_test, y_test) = load_mnist()
     labels = range(10)
     train_digits_per_label = get_digits_per_label(x_train, y_train, labels)
-    plot_example_per_class(train_digits_per_label, labels, 10)
+    # plot_example_per_class(train_digits_per_label, labels, 10)
 
-    model_partial_shape = ModelPartialShape()
-    model_partial_shape.train(train_digits_per_label, labels)
-    predicted_y = model_partial_shape.predict(x_valid)
+    """
+    plot_tmp = np.array(get_digit_parts(x_valid[0]))
+    plot_digits(plot_tmp, 1, (28, 28))
+    exit()
+    """
+
+    model_contrast = ModelContrast()
+    model_contrast.train(train_digits_per_label, labels)
+    model_contrast.plot_contrast_average_digits()
+    predicted_y = model_contrast.predict(x_valid)
     accuracy = get_accuracy(predicted_y, y_valid, labels).values()
     print accuracy
     print format(sum(accuracy) * 100.0) + "%!"
