@@ -111,7 +111,6 @@ class ModelAverage:
         :param labels: All labels
         :return: Nothing
         """
-        self.average_digits = defaultdict()
         for elem in labels:
             self.average_digits[elem] = sum(digits_per_label[elem]) / float(len(digits_per_label[elem]))
 
@@ -142,9 +141,8 @@ class ModelPartialShape:
         self.average_shapes = defaultdict()
 
     def train(self, digits_per_label, labels):
-        self.average_shapes = defaultdict()
         for elem in labels:
-            self.average_digits[elem] = sum(digits_per_label[elem]) / float(len(digits_per_label[elem]))
+            self.average_shapes[elem] = sum(digits_per_label[elem]) / float(len(digits_per_label[elem]))
 
     def predict(self, x):
         predicted_y = []
