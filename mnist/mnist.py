@@ -29,7 +29,7 @@ def plot_example_per_class(x, classes, amount):
     for i in classes:
         print_tmp = print_tmp + x[i][:amount]
     print_tmp = np.array(print_tmp)
-    models.image_helpers.plot_digits(print_tmp, amount)
+    image_helpers.plot_digits(print_tmp, amount)
 
 
 def get_digits_per_label(x, y, labels):
