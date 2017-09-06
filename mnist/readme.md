@@ -1,6 +1,5 @@
 # Machine Learning in Python 
-[cheatsheet for markdown (.md)](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)  
-One Paragraph of project description goes here
+Uses the mnist database.
 
 ## Getting Started
 

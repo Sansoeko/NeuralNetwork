@@ -25,7 +25,7 @@ def load_mnist():
 if __name__ == "__main__":
     (x_train, y_train), (x_valid, y_valid), (x_test, y_test) = load_mnist()
     labels = range(10)
-    train_digits_per_label = stand_funcs.get_digits_per_label(x_train, y_train, labels)
+    train_digits_per_label = image_helpers.get_digits_per_label(x_train, y_train, labels)
     # plot_example_per_class(train_digits_per_label, labels, 10)
 
     """

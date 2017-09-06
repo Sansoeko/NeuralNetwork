@@ -21,7 +21,8 @@ class ModelAverage:
         """
         Predicts x with self.average_digits
         :param x: Data to predict.
-        :return: predicted y values.
+        :param labels: Classes
+        :return: A list of all predicted y values.
         """
         predicted_y = []
         for elem in x:

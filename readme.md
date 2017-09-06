@@ -4,7 +4,7 @@ Using the mnist.pkl.gz database.
 
 ## Getting Started
 
-Just run mnist.py to start the program.
+Just run mnist/mnist.py to start the program.
 
 ## Authors
 
