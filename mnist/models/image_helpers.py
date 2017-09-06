@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
 
 
 def get_contrast(x):
@@ -90,11 +92,6 @@ def fit(average_x, x, labels):
 
 def get_digit_parts(data, size_x=784, size=16):
     output = []
-    for part in range(size_x/size):
-        z = []
-        for y in range(int(size**0.5)):
-            for x in range(int(size**0.5)):
-                # TODO ???
-                z.append(data[pos])
-        output.append(z)
-    return [output]
+    z = np.array(data)
+    output += z
+    return output

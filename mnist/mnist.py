@@ -34,6 +34,9 @@ if __name__ == "__main__":
     exit()
     """
 
+    image_helpers.get_digit_parts(x_train[777])
+    exit()
+
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
     predicted_y = model_average.predict(x_valid, labels)
