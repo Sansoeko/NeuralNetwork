@@ -39,8 +39,8 @@ if __name__ == "__main__":
 
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
-    predicted_y = model_average.predict(x_valid, labels)
     model_average.plot_average_digits()
+    predicted_y = model_average.predict(x_valid, labels)
     accuracy = stand_funcs.get_accuracy(predicted_y, y_valid, labels).values()
     print accuracy
     print format(sum(accuracy) * 100.0) + "%!"
