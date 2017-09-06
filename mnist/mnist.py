@@ -34,6 +34,14 @@ if __name__ == "__main__":
     exit()
     """
 
+    model_average = ModelAverage()
+    model_average.train(train_digits_per_label, labels)
+    predicted_y = model_average.predict(x_valid, labels)
+    model_average.plot_average_digits()
+    accuracy = stand_funcs.get_accuracy(predicted_y, y_valid, labels).values()
+    print accuracy
+    print format(sum(accuracy) * 100.0) + "%!"
+
     model_contrast = ModelContrast()
     model_contrast.train(train_digits_per_label, labels)
     model_contrast.plot_contrast_average_digits()
@@ -42,13 +50,6 @@ if __name__ == "__main__":
     print accuracy
     print format(sum(accuracy) * 100.0) + "%!"
 
-    model_average = ModelAverage()
-    model_average.train(train_digits_per_label, labels)
-    predicted_y = model_average.predict(x_valid, labels)
-    model_average.plot_average_digits()
-    accuracy = stand_funcs.get_accuracy(predicted_y, y_valid, labels).values()
-    print accuracy
-    print format(sum(accuracy) * 100.0) + "%!"
     # TODO doc strings (see get_digits_per_label) for all functions and all classes.
     """
     inputnodes: 28**2 = 784
