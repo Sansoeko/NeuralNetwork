@@ -1,7 +1,6 @@
 import numpy as np
 from collections import defaultdict
 
-import stand_funcs
 import image_helpers
 
 
@@ -32,7 +31,7 @@ class ModelContrast:
         predicted_y = []
         for elem in x:
             digit = image_helpers.get_contrast(elem)
-            differences = image_helpers.get_diferences(self.average_contrast, digit, labels)
+            differences = image_helpers.get_differences(self.average_contrast, digit, labels)
             # plot_digits(np.array([elem]), 1)
             predicted_y += [np.argmin(differences)]
         return predicted_y

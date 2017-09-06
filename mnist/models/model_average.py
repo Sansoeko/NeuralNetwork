@@ -1,6 +1,6 @@
 import numpy as np
+
 import image_helpers
-import stand_funcs
 
 
 class ModelAverage:
@@ -26,7 +26,7 @@ class ModelAverage:
         """
         predicted_y = []
         for elem in x:
-            differences = image_helpers.get_diferences(self.average_digits, elem, labels)
+            differences = image_helpers.get_differences(self.average_digits, elem, labels)
             # plot_digits(np.array([elem]), 1)
             predicted_y += [np.argmin(differences)]
         return predicted_y

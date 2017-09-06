@@ -1,14 +1,10 @@
-#3th party
 import gzip
 import cPickle
-from collections import defaultdict
-import numpy as np
 
-#1st and 2nd party
 import models.image_helpers as image_helpers
-import models.stand_funcs as stand_funcs
 from models.model_average import ModelAverage
 from models.model_contrast import ModelContrast
+import evaluate
 
 
 def load_mnist():
@@ -33,7 +29,6 @@ if __name__ == "__main__":
     plot_digits(plot_tmp, 1, (28, 28))
     exit()
     """
-
     image_helpers.get_digit_parts(x_train[777])
     exit()
 
@@ -41,7 +36,7 @@ if __name__ == "__main__":
     model_average.train(train_digits_per_label, labels)
     model_average.plot_average_digits()
     predicted_y = model_average.predict(x_valid, labels)
-    accuracy = stand_funcs.get_accuracy(predicted_y, y_valid, labels).values()
+    accuracy = evaluate.get_accuracy(predicted_y, y_valid, labels).values()
     print accuracy
     print format(sum(accuracy) * 100.0) + "%!"
 
@@ -49,13 +44,6 @@ if __name__ == "__main__":
     model_contrast.train(train_digits_per_label, labels)
     model_contrast.plot_contrast_average_digits()
     predicted_y = model_contrast.predict(x_valid, labels)
-    accuracy = stand_funcs.get_accuracy(predicted_y, y_valid, labels).values()
+    accuracy = evaluate.get_accuracy(predicted_y, y_valid, labels).values()
     print accuracy
     print format(sum(accuracy) * 100.0) + "%!"
-
-    # TODO doc strings (see get_digits_per_label) for all functions and all classes.
-    """
-    inputnodes: 28**2 = 784
-    hiddenodes: ???
-    outputnodes: [0,0,0,0,0,0,0,0,0,0] = 10
-    """

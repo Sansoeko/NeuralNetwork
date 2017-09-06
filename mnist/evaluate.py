@@ -1,7 +1,3 @@
-# TODO add all functions currently in mnist.py except for load_mnist()
-import image_helpers
-
-
 def get_accuracy(predicted_y, true_y, labels):
     """
     Calculates the accuracy of a model.

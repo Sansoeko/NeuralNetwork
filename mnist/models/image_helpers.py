@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
 
 
 def get_contrast(x):
@@ -22,7 +21,7 @@ def plot_example_per_class(x, classes, amount):
     for i in classes:
         print_tmp = print_tmp + x[i][:amount]
     print_tmp = np.array(print_tmp)
-    image_helpers.plot_digits(print_tmp, amount)
+    plot_digits(print_tmp, amount)
 
 
 def get_digits_per_label(x, y, labels):
@@ -56,7 +55,7 @@ def plot_digits(data, num_cols, shape=(28, 28)):
     plt.show()
 
 
-def get_diferences(x0, x1, labels):
+def get_differences(x0, x1, labels):
     """
     Calculates the diference between to pictures: x1 - x0[element].
     :param x0: input list of pictures
@@ -64,13 +63,13 @@ def get_diferences(x0, x1, labels):
     :param labels:
     :return: absolute difference between x0 and x1
     """
-    diferences = []
+    differences = []
     for label in labels:
         # print np.array(average_digits[label])
         # average_digits[label].shape = (1, 784)
         # plot_digits(np.array([average_digits[label]]), 1)
-        diferences.append(sum(abs(x1 - x0[label])))
-    return diferences
+        differences.append(sum(abs(x1 - x0[label])))
+    return differences
 
 
 def fit(average_x, x, labels):
@@ -81,16 +80,19 @@ def fit(average_x, x, labels):
     :param labels: labels in average_x and x
     :return:
     """
-    lowest_difference = image_helpers.get_diferences(average_x, x, labels)
+    lowest_difference = get_differences(average_x, x, labels)
     for i in range(len(x)/2):
         x[i] = x[i-1]
-        differences = image_helpers.get_diferences(average_x, x, labels)
+        differences = get_differences(average_x, x, labels)
         if np.argmin(differences) < np.argmin(lowest_difference):
             lowest_difference = differences
     return lowest_difference
 
 
 def get_digit_parts(data, size_x=784, size=16):
+    """
+    TODO docstring
+    """
     output = []
     z = np.array(data)
     output += z
