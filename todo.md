@@ -1,6 +1,6 @@
 # To Do's
 
-##DONE 
+##DONE
 - Learn basic programming in Python.
 - Complete simple game of snake in Python for practice.
 - Read and manipulate mnist images.
