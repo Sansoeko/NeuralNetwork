@@ -13,7 +13,7 @@
 - Log progress in log (ongoing). 
 - Write report (ongoing).
 - Experiment with other handcrafted models.
-- Run experiments and report results on handcrafted models.
+- Run [experiments](experiments.md) and report results on handcrafted models.
 
 ##TODO
 ### Regression

@@ -29,8 +29,6 @@ if __name__ == "__main__":
     plot_digits(plot_tmp, 1, (28, 28))
     exit()
     """
-    image_helpers.get_digit_parts(x_train[777])
-    exit()
 
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
