@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+
+
 def get_accuracy(predicted_y, true_y, labels):
     """
     Calculates the accuracy of a model.
@@ -17,3 +20,12 @@ def get_accuracy(predicted_y, true_y, labels):
     for elem in answers_accuracy:
         answers_accuracy[elem] = answers_right[elem] / float(len(predicted_y))
     return answers_accuracy
+
+
+def plot_regression(y1, y2):
+    n = range(10)
+    plt.subplot(222)
+    plt.bar(n, y1, 0.12)
+    plt.subplot(223)
+    plt.bar(n, y2, 0.12)
+    plt.show()

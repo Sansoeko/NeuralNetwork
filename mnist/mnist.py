@@ -36,7 +36,7 @@ if __name__ == "__main__":
     predicted_y_average = model_average.predict(x_valid, labels)
     accuracy_average = evaluate.get_accuracy(predicted_y_average, y_valid, labels).values()
     print accuracy_average
-    # print format(sum(accuracy) * 100.0) + "%!"
+    print format(sum(accuracy_average) * 100.0) + "%!"
 
     model_contrast = ModelContrast()
     model_contrast.train(train_digits_per_label, labels)
@@ -44,6 +44,6 @@ if __name__ == "__main__":
     predicted_y_contrast = model_contrast.predict(x_valid, labels)
     accuracy_contrast = evaluate.get_accuracy(predicted_y_contrast, y_valid, labels).values()
     print accuracy_contrast
-    # print format(sum(accuracy) * 100.0) + "%!"
+    print format(sum(accuracy_contrast) * 100.0) + "%!"
 
-    image_helpers.plot_regression(accuracy_average, accuracy_contrast)
+    evaluate.plot_regression(accuracy_average, accuracy_contrast)

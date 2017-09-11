@@ -67,3 +67,6 @@ accuracy test.
 Did some todo's and tweaked some minor things. Later Created the contrast model. Gave every model his own files. And 
 sorted functions and Classes in their own files. I also updated the initial 'readme.md'. Later I fixed the log and Ruben
 fixed some code and created 'todo.md'.
+
+### 11-09-2017
+Changed abs() in get_diference to **2. This made the score increase to 83.07%!

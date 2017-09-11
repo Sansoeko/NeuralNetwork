@@ -55,15 +55,6 @@ def plot_digits(data, num_cols, shape=(28, 28)):
     plt.show()
 
 
-def plot_regression(y1, y2):
-    n = range(10)
-    plt.subplot(222)
-    plt.bar(n, y1, 0.12)
-    plt.subplot(223)
-    plt.bar(n, y2, 0.12)
-    plt.show()
-
-
 def get_differences(x0, x1, labels):
     """
     Calculates the diference between to pictures: x1 - x0[element].
@@ -77,7 +68,7 @@ def get_differences(x0, x1, labels):
         # print np.array(average_digits[label])
         # average_digits[label].shape = (1, 784)
         # plot_digits(np.array([average_digits[label]]), 1)
-        differences.append(sum(abs(x1 - x0[label])))
+        differences.append(sum((x1 - x0[label])**2))
     return differences
 
 
