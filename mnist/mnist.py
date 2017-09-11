@@ -1,9 +1,11 @@
 import gzip
 import cPickle
+import numpy as np
 
 import models.image_helpers as image_helpers
 from models.model_average import ModelAverage
 from models.model_contrast import ModelContrast
+import regression.regression as regression
 import evaluate
 
 
@@ -30,6 +32,10 @@ if __name__ == "__main__":
     exit()
     """
 
+    a_plot = regression.regression(x_train, y_train)
+    image_helpers.plot_digits(np.array([a_plot]), 1)
+    exit()
+
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
     # model_average.plot_average_digits()
@@ -45,5 +51,3 @@ if __name__ == "__main__":
     accuracy_contrast = evaluate.get_accuracy(predicted_y_contrast, y_valid, labels).values()
     print accuracy_contrast
     print format(sum(accuracy_contrast) * 100.0) + "%!"
-
-    evaluate.plot_regression(accuracy_average, accuracy_contrast)
