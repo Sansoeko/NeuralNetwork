@@ -32,8 +32,9 @@ if __name__ == "__main__":
     exit()
     """
 
-    a_plot = regression.regression(x_train, y_train)
-    image_helpers.plot_digits(np.array([a_plot]), 1)
+    a = regression.regression(x_train, y_train)
+    image_helpers.plot_digits(np.array([a]), 1)
+
     exit()
 
     model_average = ModelAverage()
