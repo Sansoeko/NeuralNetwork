@@ -58,7 +58,7 @@ def plot_digits(data, num_cols, shape=(28, 28)):
 def get_differences(x0, x1, labels):
     """
     Calculates the diference between to pictures: x1 - x0[element].
-    :param x0: input list of pictures
+    :param x0: input list of average pictures
     :param x1:  input picture
     :param labels:
     :return: absolute difference between x0 and x1

@@ -35,6 +35,31 @@ if __name__ == "__main__":
     a = regression.regression(x_train, y_train)
     image_helpers.plot_digits(np.array([a]), 1)
 
+    index = []
+    for i in range(len(y_valid)):
+        if y_valid[i] > 1:
+            index.append(i)
+
+    y_valid = np.delete(y_valid, index)
+    x_valid = np.delete(x_valid, index, 0)
+
+    index = []
+    for i in range(len(y_test)):
+        if y_test[i] > 1:
+            index.append(i)
+
+    y_test = np.delete(y_test, index)
+    x_test = np.delete(x_test, index, 0)
+
+    predicted_y = regression.predict(x_valid, a)
+    accuracy = evaluate.get_accuracy(predicted_y, y_valid, [0, 1]).values()
+    print accuracy
+    print format(sum(accuracy) * 100.0) + "%!"
+
+    predicted_y = regression.predict(x_test, a)
+    accuracy = evaluate.get_accuracy(predicted_y, y_test, [0, 1]).values()
+    print accuracy
+    print format(sum(accuracy) * 100.0) + "%!"
     exit()
 
     model_average = ModelAverage()
