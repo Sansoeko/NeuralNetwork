@@ -3,36 +3,25 @@ import numpy as np
 import random
 
 
-def regression(x, y_true, alpha=0.00001):
-    index = []
-
-    for i in range(len(y_true)):
-        if y_true[i] > 1:
-            index.append(i)
-
-    y_true = np.delete(y_true, index)
-    x = np.delete(x, index, 0)
-
-    a = []
-    for i in range(784):
-        a.append(0.5)
-        # a.append(random.uniform(0, 1))
+def regression(x, y_true, num_epoch=25, alpha=0.00001):
+    w = [random.uniform(-1, 1) for _ in range(len(x[0]))]
+    y_true = [-1000 if elem == 0 else 1000 for elem in y_true]
 
     errors = []
-    for i3 in range(len(y_true)):
-        y_pred = np.mean(a * x[i3])
-        error = (y_pred - y_true[i3])**2
+    for _ in range(num_epoch):
+        error = 0
+        for elem_x, elem_y_true in zip(x, y_true):
+            y_pred = np.mean(w * elem_x)
+            error += (y_pred - elem_y_true)**2
+            w = w - alpha * (w*elem_x - elem_y_true)*elem_x
         errors.append(error)
-        a = a - alpha * (a*x[i3] - y_true[i3])
 
     plt.plot(range(len(errors)), errors)
     plt.show()
-    return a
+    return w
 
 
 def predict(x, a):
-    y_pred = []
-    for elem in x:
-        y_pred.append(int(round(np.mean(a * elem))))
+    y_pred = [0 if np.mean(a * elem) < 0 else 1 for elem in x]
     return y_pred
 
