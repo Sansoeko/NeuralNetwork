@@ -35,30 +35,30 @@ if __name__ == "__main__":
     x_train = [x_train[i] for i, elem in enumerate(y_train) if elem < 2]
     y_train = [elem for elem in y_train if elem < 2]
 
-    a = regression.regression(x_train, y_train)
+    a = regression.train(x_train, y_train)
     image_helpers.plot_digits(np.array([a]), 1)
 
     x_valid = [x_valid[i] for i, elem in enumerate(y_valid) if elem < 2]
     y_valid = [elem for elem in y_valid if elem < 2]
 
     y_pred = regression.predict(x_valid, a)
-    accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1]).values()
-    print accuracy
-    print "Accuracy: {}%!".format(sum(accuracy) * 100.0)
+    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
+    print accuracies
+    print "Accuracy: {}%!".format(accuracy * 100.0)
     exit()
 
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
     # model_average.plot_average_digits()
     y_pred = model_average.predict(x_valid, labels)
-    accuracy = evaluate.get_accuracy(y_pred, y_valid, labels).values()
-    print accuracy
-    print "Accuracy: {}%!".format(sum(accuracy) * 100.0)
+    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
+    print accuracies
+    print "Accuracy: {}%!".format(accuracy * 100.0)
 
     model_contrast = ModelContrast()
     model_contrast.train(train_digits_per_label, labels)
     # model_contrast.plot_contrast_average_digits()
     y_pred = model_contrast.predict(x_valid, labels)
-    accuracy = evaluate.get_accuracy(y_pred, y_valid, labels).values()
-    print accuracy
-    print "Accuracy: {}%!".format(sum(accuracy) * 100.0)
+    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
+    print accuracies
+    print "Accuracy: {}%!".format(accuracy * 100.0)
