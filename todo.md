@@ -8,20 +8,34 @@
 - Learn about object oriented programming (OOP).
 - Split current code base into modules and classes.
 - Create readme's.
+- Learn about basic linear regression.
+- Learn about multivariate regression.
+- List comprehension
+- Tqdm
+- Model complexity
+- Overfitting vs underfitting 
+- Train, valid, test
+- TP, FP, TN, FN, accuracy, precision, recall
+- Learn about multi-class regression.
+- Learn about logistic regression.
 
 ##DOING
 - Log progress in log (ongoing). 
 - Write report (ongoing).
 - Experiment with other handcrafted models.
 - Run [experiments](experiments.md) and report results on handcrafted models.
+- Add bias parameter
+- Implement logistic regression.
+- Implement multi-class logistic regression.
+- Create model class from logistic regression
+- Plot weights
 
 ##TODO
+### General python
+- argparse
+- linear algebra
+
 ### Regression
-- Learn about basic linear regression.
-- Learn about multivariate regression.
-- Learn about multi-class regression.
-- Learn about logistic regression.
-- Implement logistic regression.
 - Run experiments with logistic regression.
 
 ### Neural net
