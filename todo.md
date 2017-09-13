@@ -49,6 +49,3 @@
 - Learn about convolutional neural networks (CNN).
 - Implement convolution neural network. 
 - Run experiments and report results on handcrafted models.
-
-### Log
-- Finding easy solution for recording working hours
