@@ -1,6 +1,7 @@
 import gzip
 import cPickle
 import numpy as np
+import random
 
 import models.image_helpers as image_helpers
 from models.model_average import ModelAverage
@@ -32,16 +33,14 @@ if __name__ == "__main__":
     exit()
     """
 
-    x_train = [x_train[i] for i, elem in enumerate(y_train) if elem < 2]
-    y_train = [elem for elem in y_train if elem < 2]
+    # x_train = [x_train[i] for i, elem in enumerate(y_train) if elem < 2]
+    # y_train = [elem for elem in y_train if elem < 2]
 
-    a = regression.train(x_train, y_train)
-    image_helpers.plot_digits(np.array([a]), 1)
+    w = regression.train(x_train, y_train, labels)
+    w = np.array(w)
+    # image_helpers.plot_digits(w, 5)
 
-    x_valid = [x_valid[i] for i, elem in enumerate(y_valid) if elem < 2]
-    y_valid = [elem for elem in y_valid if elem < 2]
-
-    y_pred = regression.predict(x_valid, a)
+    y_pred = regression.predict(x_valid, w, labels)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
@@ -49,11 +48,12 @@ if __name__ == "__main__":
 
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
-    # model_average.plot_average_digits()
+    model_average.plot_average_digits()
     y_pred = model_average.predict(x_valid, labels)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
+    exit()
 
     model_contrast = ModelContrast()
     model_contrast.train(train_digits_per_label, labels)
@@ -62,3 +62,5 @@ if __name__ == "__main__":
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
+
+

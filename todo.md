@@ -49,3 +49,6 @@
 - Learn about convolutional neural networks (CNN).
 - Implement convolution neural network. 
 - Run experiments and report results on handcrafted models.
+
+### normalizeren
+- pixel waarden normalizeren, tussen -1 en 1
