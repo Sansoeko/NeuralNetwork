@@ -6,8 +6,11 @@ import models.network_functions as nf
 
 
 def train(x, y_true, labels, num_epochs=75, alpha=0.1):
-    w = [random.uniform(-1, 1) for _ in range(len(x[0]))] * len(labels)
+    w = [random.uniform(-1, 1) for _ in range(len(x[0]))] * len(labels)*2
+    w2 = [random.uniform(-1, 1) for _ in range(20)] * len(labels)
     bias = [random.uniform(-0.1, 0.1)] * len(labels)
+
+    # output layer
     for elem_label in tqdm(labels):
         y_tmp = [1 if elem == elem_label else 0 for elem in y_true]
         errors = []
@@ -17,19 +20,19 @@ def train(x, y_true, labels, num_epochs=75, alpha=0.1):
             error = 0
             for elem_x, elem_y_tmp in zip(x, y_tmp):
                 y_pred = nf.activation_function_logistic(np.mean(w_tmp * elem_x) + bias_tmp)
-                error += (y_pred - elem_y_tmp)**2
+                # error += (y_pred - elem_y_tmp)**2
                 w_tmp = w_tmp - alpha * (y_pred - elem_y_tmp)*elem_x
                 bias_tmp = bias_tmp - alpha * (np.mean((y_pred - elem_y_tmp)*elem_x) + bias_tmp)
-            errors.append(error)
+            # errors.append(error)
         w[elem_label] = w_tmp
         bias[elem_label] = bias_tmp
 
-    plt.plot(range(len(errors)), errors)
-    plt.show()
-    return w, bias
+    # plt.plot(range(len(errors)), errors)
+    # plt.show()
+    return w, w2, bias
 
 
-def predict(x, w, bias, labels):
+def predict(x, w, w_hidden, bias, labels):
     y_pred = []
     for elem in x:
         args = []

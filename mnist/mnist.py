@@ -36,12 +36,12 @@ if __name__ == "__main__":
     # x_train = [x_train[i] for i, elem in enumerate(y_train) if elem < 2]
     # y_train = [elem for elem in y_train if elem < 2]
 
-    w, bias = regression.train(x_train, y_train, labels)
+    w, w_hidden, bias = regression.train(x_train, y_train, labels)
     # z = np.array([w])
     # print z
     # image_helpers.plot_digits(z, 5)
 
-    y_pred = regression.predict(x_valid, w, bias, labels)
+    y_pred = regression.predict(x_valid, w, w_hidden, bias, labels)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
