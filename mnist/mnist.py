@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # x_train = [x_train[i] for i, elem in enumerate(y_train) if elem < 2]
     # y_train = [elem for elem in y_train if elem < 2]
 
-    w, w_hidden, bias = regression.train(x_train, y_train, labels)
+    w, w_hidden, bias = regression.train(x_train[:1000], y_train[:1000], labels)
     # z = np.array([w])
     # print z
     # image_helpers.plot_digits(z, 5)
