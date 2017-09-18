@@ -27,21 +27,15 @@ if __name__ == "__main__":
     train_digits_per_label = image_helpers.get_digits_per_label(x_train, y_train, labels)
     # plot_example_per_class(train_digits_per_label, labels, 10)
 
-    """
-    plot_tmp = np.array(get_digit_parts(x_valid[0]))
-    plot_digits(plot_tmp, 1, (28, 28))
-    exit()
-    """
-
-    # x_train = [x_train[i] for i, elem in enumerate(y_train) if elem < 2]
-    # y_train = [elem for elem in y_train if elem < 2]
-
-    w, w_hidden, bias = regression.train(x_train[:1000], y_train[:1000], labels)
-    # z = np.array([w])
-    # print z
-    # image_helpers.plot_digits(z, 5)
-
+    w, w_hidden, bias = regression.train(x_train[:5000], y_train[:5000], labels)
     y_pred = regression.predict(x_valid, w, w_hidden, bias, labels)
+    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
+    print accuracies
+    print "Accuracy: {}%!".format(accuracy * 100.0)
+    exit()
+
+    w, bias = regression.train_regression(x_train, y_train, labels)
+    y_pred = regression.predict_regression(x_valid, w, bias, labels)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
