@@ -1,13 +1,12 @@
-import gzip
 import cPickle
-import numpy as np
-import random
+import gzip
 
+import evaluate
 import models.image_helpers as image_helpers
+from models.regression import regression as Regression
+from models.twolayerNN import TwoLayerNN as TwoLayerNN
 from models.model_average import ModelAverage
 from models.model_contrast import ModelContrast
-import regression.regression as regression
-import evaluate
 
 
 def load_mnist():
@@ -27,19 +26,20 @@ if __name__ == "__main__":
     train_digits_per_label = image_helpers.get_digits_per_label(x_train, y_train, labels)
     # plot_example_per_class(train_digits_per_label, labels, 10)
 
-    w, w_hidden, bias = regression.train(x_train[:5000], y_train[:5000], labels)
-    y_pred = regression.predict(x_valid, w, w_hidden, bias, labels)
+    model_twolayerNN = TwoLayerNN()
+    w, w_hidden, bias = model_twolayerNN.train(x_train[:5000], y_train[:5000], labels)
+    y_pred = model_twolayerNN.predict(x_valid, w, w_hidden, bias, labels)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
     exit()
 
-    w, bias = regression.train_regression(x_train, y_train, labels)
-    y_pred = regression.predict_regression(x_valid, w, bias, labels)
+    model_regression = Regression()
+    w, bias = model_regression.train(x_train, y_train, labels)
+    y_pred = model_regression.predict(x_valid, w, bias, labels)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
-    exit()
 
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
@@ -48,7 +48,6 @@ if __name__ == "__main__":
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
-    exit()
 
     model_contrast = ModelContrast()
     model_contrast.train(train_digits_per_label, labels)
