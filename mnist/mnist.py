@@ -26,7 +26,7 @@ if __name__ == "__main__":
     train_digits_per_label = image_helpers.get_digits_per_label(x_train, y_train, labels)
     # plot_example_per_class(train_digits_per_label, labels, 10)
 
-    model_twolayerNN = TwoLayerNN()
+    model_twolayerNN = TwoLayerNN(labels, len(x_train[0]))
     w, w_hidden, bias = model_twolayerNN.train(x_train[:5000], y_train[:5000], labels)
     y_pred = model_twolayerNN.predict(x_valid, w, w_hidden, bias, labels)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
