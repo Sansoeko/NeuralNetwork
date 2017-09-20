@@ -27,7 +27,7 @@ class regression:
                     bias_tmp = bias_tmp - alpha * (np.mean((y_pred - elem_y_tmp)*elem_x) + bias_tmp)
                 errors.append(error)
                 self.w[elem_label] = w_tmp
-            bias[elem_label] = bias_tmp
+            self.bias[elem_label] = bias_tmp
         return self.w, bias
 
     def predict(self, x, w, bias, labels):
