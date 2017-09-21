@@ -19,6 +19,7 @@ This project is licensed not yet Licensed.
 ## Acknowledgments
 
 * [Ruben Seggers](https://github.com/rubenseggers)
+* [Jasper Stammes](www.trumpbangsthings.com)
 
 ## Also
 ### But how?
