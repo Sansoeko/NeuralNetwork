@@ -4,7 +4,8 @@ import gzip
 import evaluate
 import models.image_helpers as image_helpers
 from models.regression import regression as Regression
-from models.twolayerNN import TwoLayerNN as TwoLayerNN
+from models.twolayerNN import TwoLayerNN
+from models.neural_net import NeuralNet
 from models.model_average import ModelAverage
 from models.model_contrast import ModelContrast
 
@@ -25,6 +26,17 @@ if __name__ == "__main__":
     labels = range(10)
     train_digits_per_label = image_helpers.get_digits_per_label(x_train, y_train, labels)
     # plot_example_per_class(train_digits_per_label, labels, 10)
+
+    model_nn = NeuralNet(len(labels), len(x_train[0]), 3, 20)
+    model_nn.train(x_train, y_train, labels)
+    y_pred = model_nn.predict(x_valid)
+    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
+    print accuracies
+    if accuracy > 0.9:
+        print "Accuracy: {}%!".format(accuracy * 100.0)
+    else:
+        print "Accuracy: {}% ..mehhh...".format(accuracy * 100.0)
+    exit()
 
     model_twolayerNN = TwoLayerNN(len(labels), len(x_train[0]), 20)
     model_twolayerNN.train(x_train, y_train, labels)

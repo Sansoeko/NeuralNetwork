@@ -44,6 +44,7 @@ class TwoLayerNN:
                     new_weights = np.array(self.w[1][i][1:] - eta * output_error[i] * hidden_layer)    # 50
                     w_output_new[i] = np.append(new_bias, new_weights)
 
+                # calculating gradient and new hidden weights
                 deltas_times_weights = []
                 for i in range(self.hidden_size):
                     deltas_times_weights.append(sum(output_error * [self.w[1][j][i+1] for j in range(self.output_size)]))
@@ -60,8 +61,9 @@ class TwoLayerNN:
                 self.w[0] = np.array([elem.tolist() for elem in w_hidden_new])
             all_errors.append(error_sum)
         plt.plot(range(len(all_errors)), all_errors)
-        plt.show()
+        print
         print "eta:" + str(eta)
+        plt.show()
 
     def input_to_output(self, elem_of_input):
         hidden_layer = np.array(
