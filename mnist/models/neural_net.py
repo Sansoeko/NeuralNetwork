@@ -29,7 +29,7 @@ class NeuralNet:
         self.output_size = output_size
         self.act = nf.activation_function_logistic
 
-    def train(self, x, y_true, labels, num_epochs=10, eta=1):
+    def train(self, x, y_true, labels, num_epochs=20, eta=0.5):
         all_errors = []
         output_targets = [[1 if elem_label == elem_y else 0 for elem_label in labels] for elem_y in y_true]
 
