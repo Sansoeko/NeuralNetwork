@@ -8,6 +8,7 @@ from models.twolayerNN import TwoLayerNN
 from models.neural_net import NeuralNet
 from models.model_average import ModelAverage
 from models.model_contrast import ModelContrast
+from models.model_convulution import ModelConvolve
 
 
 def load_mnist():
@@ -27,7 +28,13 @@ if __name__ == "__main__":
     train_digits_per_label = image_helpers.get_digits_per_label(x_train, y_train, labels)
     # plot_example_per_class(train_digits_per_label, labels, 10)
 
-    model_nn = NeuralNet(len(labels), len(x_train[0]), 1, 15)
+    model_convulution = ModelConvolve()
+    x_train_convuluted = model_convulution.train(x_train, y_train)
+    image_helpers.plot_digits(x_train[:25], 5)
+    image_helpers.plot_digits(x_train_convuluted[:25], 5)
+    exit()
+
+    model_nn = NeuralNet(len(labels), len(x_train[0]), 2, 20)
     model_nn.train(x_train, y_train, labels)
     y_pred = model_nn.predict(x_valid)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)

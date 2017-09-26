@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.ndimage as ndi
 
 
 def get_contrast(x):
@@ -7,6 +8,12 @@ def get_contrast(x):
     for i in range(0, len(x) - 1):
         contrast[i] = x[i] - x[i + 1]
     return contrast
+
+
+def convolve(image_input, image_filter=np.array([[0, 1, 0], [0, 1, 0], [0, 1, 0]])):
+    image_input = np.reshape(image_input, (28, 28))
+    new_image = ndi.convolve(image_input, image_filter, mode='constant', cval=0.0)
+    return new_image
 
 
 def plot_example_per_class(x, classes, amount):
@@ -65,9 +72,6 @@ def get_differences(x0, x1, labels):
     """
     differences = []
     for label in labels:
-        # print np.array(average_digits[label])
-        # average_digits[label].shape = (1, 784)
-        # plot_digits(np.array([average_digits[label]]), 1)
         differences.append(sum((x1 - x0[label])**2))
     return differences
 
