@@ -103,3 +103,4 @@ ENV/
 #later added
 ../.idea
 .idea/
+*.out

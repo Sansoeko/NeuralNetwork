@@ -10,9 +10,9 @@ def get_contrast(x):
     return contrast
 
 
-def convolve(image_input, image_filter=np.array([[0, 1, 0], [0, 1, 0], [0, 1, 0]])):
+def convolve(image_input, image_filter=np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])):
     image_input = np.reshape(image_input, (28, 28))
-    new_image = ndi.convolve(image_input, image_filter, mode='constant', cval=0.0)
+    new_image = ndi.convolve(image_input, image_filter/float(image_filter.size), mode='constant', cval=0.0)
     return new_image
 
 

@@ -1,5 +1,6 @@
 import cPickle
 import gzip
+import argparse
 
 import evaluate
 import models.image_helpers as image_helpers
@@ -23,18 +24,17 @@ def load_mnist():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--num_hidden_layers", type=int)
+    parser.add_argument("--num_hidden_neurons", type=int)
+    FLAGS, _ = parser.parse_known_args()
+
     (x_train, y_train), (x_valid, y_valid), (x_test, y_test) = load_mnist()
     labels = range(10)
     train_digits_per_label = image_helpers.get_digits_per_label(x_train, y_train, labels)
     # plot_example_per_class(train_digits_per_label, labels, 10)
 
-    model_convulution = ModelConvolve()
-    x_train_convuluted = model_convulution.train(x_train, y_train)
-    image_helpers.plot_digits(x_train[:25], 5)
-    image_helpers.plot_digits(x_train_convuluted[:25], 5)
-    exit()
-
-    model_nn = NeuralNet(len(labels), len(x_train[0]), 2, 20)
+    model_nn = NeuralNet(len(labels), len(x_train[0]), FLAGS.num_hidden_layers, FLAGS.num_hidden_neurons)
     model_nn.train(x_train, y_train, labels)
     y_pred = model_nn.predict(x_valid)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
@@ -43,6 +43,12 @@ if __name__ == "__main__":
         print "Accuracy: {}%!".format(accuracy * 100.0)
     else:
         print "Accuracy: {}% ..mehhh...".format(accuracy * 100.0)
+    exit()
+
+    model_convulution = ModelConvolve()
+    x_train_convuluted = model_convulution.train(x_train, y_train)
+    image_helpers.plot_digits(x_train[:25], 5)
+    image_helpers.plot_digits(x_train_convuluted[:25], 5)
     exit()
 
     model_twolayerNN = TwoLayerNN(len(labels), len(x_train[0]), 20)
