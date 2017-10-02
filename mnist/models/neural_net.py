@@ -51,7 +51,7 @@ class NeuralNet:
         while error_sum_valid < last_error_sum_valid or error_sum_valid < last_last_error_sum_valid:
             epochs += 1
             error_sum = 0
-            for elem_x, output_target in tqdm(zip(x, output_targets)):
+            for elem_x, output_target in zip(x, output_targets):
 
                 # predicting y_true
                 output_values, hidden_layer = self.input_to_output(elem_x)
@@ -110,11 +110,11 @@ class NeuralNet:
             # print time for experiments
             print str(epochs) + ": Time after epoch: " + str(datetime.datetime.now().time())
 
-        plt.plot(range(len(all_errors)), all_errors, range(len(all_errors_valid)), all_errors_valid)
+        # plt.plot(range(len(all_errors)), all_errors, range(len(all_errors_valid)), all_errors_valid)
         print
         print "Learning rates: " + str(eta)
         print "Times learned: " + str(epochs)
-        plt.show()
+        # plt.show()
 
     def input_to_output(self, elem_of_input):
         hidden_layer = [None] * self.amount_hidden_layers
@@ -127,7 +127,7 @@ class NeuralNet:
 
     def predict(self, x):
         y_pred = []
-        for elem in tqdm(x):
+        for elem in x:
             # predicting y_true
             y_pred.append(np.argmax(self.input_to_output(elem)[0]))
         return y_pred
