@@ -35,7 +35,7 @@ if __name__ == "__main__":
     # plot_example_per_class(train_digits_per_label, labels, 10)
 
     model_nn = NeuralNet(len(labels), len(x_train[0]), FLAGS.num_hidden_layers, FLAGS.num_hidden_neurons)
-    model_nn.train(x_train, y_train, labels)
+    model_nn.train(x_train, y_train, x_valid, y_valid, labels)
     y_pred = model_nn.predict(x_valid)
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
     print accuracies

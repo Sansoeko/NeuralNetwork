@@ -3,6 +3,7 @@ import numpy as np
 from tqdm import tqdm
 import random
 import network_functions as nf
+import datetime
 
 
 class NeuralNet:
@@ -10,10 +11,10 @@ class NeuralNet:
         # define hidden layers
         self.w = [None] * amount_hidden_layers
         for hidden_layer_num in range(amount_hidden_layers):
-            self.w[hidden_layer_num] = np.array([[random.uniform(-1, 1) for _ in range(input_size + 1)] for i in range(hidden_size)])
+            self.w[hidden_layer_num] = np.array([[random.normalvariate(0, 0.2) for _ in range(input_size + 1)] for i in range(hidden_size)])
 
         # define output layer
-        self.wL = np.array([[random.uniform(-1, 1) for _ in range(hidden_size + 1)] for i in range(output_size)])
+        self.wL = np.array([[random.normalvariate(0, 0.2) for _ in range(hidden_size + 1)] for i in range(output_size)])
 
         # bias to zero
         for hidden_layer_num in range(amount_hidden_layers):
@@ -29,13 +30,29 @@ class NeuralNet:
         self.output_size = output_size
         self.act = nf.activation_function_logistic
 
-    def train(self, x, y_true, labels, num_epochs=20, eta=0.5):
+    def train(self, x, y_true, x_valid, y_valid, labels, eta=0.1):
+        print "Time start: " + str(datetime.datetime.now().time())
         all_errors = []
+        all_errors_valid = []
         output_targets = [[1 if elem_label == elem_y else 0 for elem_label in labels] for elem_y in y_true]
+        output_targets_valid = [[1 if elem_label == elem_y else 0 for elem_label in labels] for elem_y in y_valid]
 
-        for _ in tqdm(range(num_epochs)):
+        # first valid test
+        last_error_sum_valid = 0
+        for elem_x, output_target in zip(x_valid, output_targets_valid):
+            # predicting y_valid
+            output_values, hidden_layer = self.input_to_output(elem_x)
+            last_error_sum_valid += np.sum((output_target - output_values) ** 2)
+        last_last_error_sum_valid = last_error_sum_valid
+        error_sum_valid = last_error_sum_valid - 5
+        print "First error_sum_valid: " + str(error_sum_valid + 5)
+
+        epochs = 0
+        while error_sum_valid < last_error_sum_valid or error_sum_valid < last_last_error_sum_valid:
+            epochs += 1
             error_sum = 0
             for elem_x, output_target in tqdm(zip(x, output_targets)):
+
                 # predicting y_true
                 output_values, hidden_layer = self.input_to_output(elem_x)
 
@@ -78,9 +95,25 @@ class NeuralNet:
                 self.w = w_hidden_tmp  # np.array([elem.tolist() for elem in w_hidden_tmp])
                 self.wL = w_output_new  # np.array([elem.tolist() for elem in w_hidden_new])
             all_errors.append(error_sum)
-        plt.plot(range(len(all_errors)), all_errors)
+
+            # create new error_sum_valid and store last_error_sum_valid
+            last_last_error_sum_valid = last_error_sum_valid
+            last_error_sum_valid = error_sum_valid
+            error_sum_valid = 0
+            for elem_x, output_target in zip(x_valid, output_targets_valid):
+                # predicting y_valid
+                output_values, hidden_layer = self.input_to_output(elem_x)
+                error_sum_valid += np.sum((output_target - output_values) ** 2)
+            all_errors_valid.append(error_sum_valid)
+            print str(epochs) + ": After epoch the error_sum_valid: " + str(error_sum_valid)
+
+            # print time for experiments
+            print str(epochs) + ": Time after epoch: " + str(datetime.datetime.now().time())
+
+        plt.plot(range(len(all_errors)), all_errors, range(len(all_errors_valid)), all_errors_valid)
         print
-        print "eta:" + str(eta)
+        print "Learning rates: " + str(eta)
+        print "Times learned: " + str(epochs)
         plt.show()
 
     def input_to_output(self, elem_of_input):
