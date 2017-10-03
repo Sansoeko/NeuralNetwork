@@ -113,6 +113,8 @@ class NeuralNet:
         # plt.plot(range(len(all_errors)), all_errors, range(len(all_errors_valid)), all_errors_valid)
         print
         print "Learning rates: " + str(eta)
+        print "With hidden layers: " + str(self.amount_hidden_layers)
+        print "With neurons per hidden layer: " + str(self.amount_hidden)
         print "Times learned: " + str(epochs)
         # plt.show()
 
