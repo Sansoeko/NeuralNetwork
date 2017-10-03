@@ -43,6 +43,22 @@ if __name__ == "__main__":
         print "Accuracy: {}%!".format(accuracy * 100.0)
     else:
         print "Accuracy: {}% ..mehhh...".format(accuracy * 100.0)
+    y_pred = model_nn.predict(x_test)
+    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_test, labels)
+    print "On the testset:"
+    print accuracies
+    if accuracy > 0.9:
+        print "Accuracy on testset: {}%!".format(accuracy * 100.0)
+    else:
+        print "Accuracy on testset: {}% ..mehhh...".format(accuracy * 100.0)
+    exit()
+
+    model_regression = Regression()
+    w, bias = model_regression.train(x_train, y_train, labels)
+    y_pred = model_regression.predict(x_valid, w, bias, labels)
+    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
+    print accuracies
+    print "Accuracy: {}%!".format(accuracy * 100.0)
     exit()
 
     model_convulution = ModelConvolve()
@@ -62,13 +78,6 @@ if __name__ == "__main__":
         print "Accuracy: {}% ..mehhh...".format(accuracy * 100.0)
     exit()
 
-    model_regression = Regression()
-    w, bias = model_regression.train(x_train, y_train, labels)
-    y_pred = model_regression.predict(x_valid, w, bias, labels)
-    accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, [0, 1])
-    print accuracies
-    print "Accuracy: {}%!".format(accuracy * 100.0)
-
     model_average = ModelAverage()
     model_average.train(train_digits_per_label, labels)
     model_average.plot_average_digits()
@@ -84,3 +93,4 @@ if __name__ == "__main__":
     accuracies, accuracy = evaluate.get_accuracy(y_pred, y_valid, labels)
     print accuracies
     print "Accuracy: {}%!".format(accuracy * 100.0)
+    exit()
