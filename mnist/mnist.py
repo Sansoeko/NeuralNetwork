@@ -1,6 +1,7 @@
 import cPickle
 import gzip
 import argparse
+import numpy as np
 
 import evaluate
 import models.image_helpers as image_helpers

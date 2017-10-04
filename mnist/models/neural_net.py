@@ -78,7 +78,7 @@ class NeuralNet:
                     w_hidden_new = [None] * self.hidden_size
                     for i in range(self.hidden_size):
                         hidden_error = deltas_times_weights[i] * hidden_layer[-1-num_hidden_layer][i] * (1 - hidden_layer[-1-num_hidden_layer][i])
-                        new_weights = np.array(self.w[-1-num_hidden_layer][i][1:] - eta * elem_x * hidden_error)
+                        new_weights = np.array(self.w[-1-num_hidden_layer][i][1:] - (eta * 10**-num_hidden_layer) * elem_x * hidden_error)
                         w_hidden_new[i] = np.append(new_bias, new_weights)
                     last_error = hidden_error
 
@@ -105,16 +105,17 @@ class NeuralNet:
                 output_values, hidden_layer = self.input_to_output(elem_x)
                 error_sum_valid += np.sum((output_target - output_values) ** 2)
             all_errors_valid.append(error_sum_valid)
-            print str(epochs) + ": After epoch the error_sum_valid: " + str(error_sum_valid)
+            print str(epochs) + ": After epoch the error_sum_valid: " + str(self.hidden_size)
 
             # print time for experiments
             print str(epochs) + ": Time after epoch: " + str(datetime.datetime.now().time())
 
+        # all_errors_valid = [elem_error_sum_valid * 5 for elem_error_sum_valid in all_errors_valid]
         # plt.plot(range(len(all_errors)), all_errors, range(len(all_errors_valid)), all_errors_valid)
         print
         print "Learning rates: " + str(eta)
         print "With hidden layers: " + str(self.amount_hidden_layers)
-        print "With neurons per hidden layer: " + str(self.amount_hidden)
+        print "With neurons per hidden layer: " + str(self.hidden_size)
         print "Times learned: " + str(epochs)
         # plt.show()
 
